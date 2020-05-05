@@ -15,7 +15,7 @@ $blue: #355c7d;
 .gameboard__unit {
     width: 100px;
     height: 100px;
-    background: linear-gradient($purple, $blue);
+    background: linear-gradient($purple 5%, $blue 80%);
     border: 2px solid $peach;
     cursor: pointer;
 }
@@ -46,12 +46,14 @@ $blue: #355c7d;
 }
 
 .gameboard__piece--1 {
+    border: 2px solid rgba(53, 92, 125, 0.75);
     background: $peach;
     z-index: 1;
     transform: translate(0, 0);
 }
 
 .gameboard__piece--2 {
+    border: 2px solid rgba(53, 92, 125, 0.75);
     background: $sunset-pink;
     z-index: 999;
     transform: translate(0, 0);

@@ -1,6 +1,27 @@
 import React, { Component } from 'react';
-import className from 'classnames';
 import './GameBoard.scss';
+
+// Helper function to check to see if array has consecutive ints
+const hasConsecutive = (arr, amount) => {
+    var last = null;
+    var count = 0;
+
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] !== last || arr[i] === 0) {
+            last = arr[i];
+            count = 0;
+        }
+
+        count += 1;
+
+        if (amount <= count) {
+            console.log(arr);
+            return true;
+        }
+    }
+
+    return false;
+};
 
 class GameBoard extends Component {
     static propTypes = {};
@@ -22,13 +43,18 @@ class GameBoard extends Component {
                 [0, 0, 0, 0, 0, 0, 0, 0],
             ],
             playersTurn: 1,
+            winner: 0,
         };
     }
 
     handleUnitClick = (rowIndex, unitIndex, unitRow) => {
-        const { gameBoardArr, playersTurn } = this.state;
+        const { gameBoardArr, playersTurn, winner } = this.state;
         let updatedBoard = [...gameBoardArr];
         let nextPlayer = 1;
+
+        if (winner !== 0) {
+            return;
+        }
 
         if (playersTurn === 1) {
             nextPlayer = 2;
@@ -43,12 +69,21 @@ class GameBoard extends Component {
         unitRow.splice(unitIndex, 1, playersTurn);
         updatedBoard.splice(rowIndex, 1, unitRow);
 
+        // If rows have playersTurn number 4 times in a row
+        if (hasConsecutive(unitRow, 4)) {
+            this.setState({
+                winner: playersTurn,
+            });
+
+            return;
+        }
+
+        // also loop through each row and create new array for every nth in row
+
         this.setState({
             gameBoardArr: updatedBoard,
             playersTurn: nextPlayer,
         });
-
-        console.log(updatedBoard);
     };
 
     render() {
