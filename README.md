@@ -1,4 +1,5 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Connect Four
+Connect four game in React
 
 ## Available Scripts
 
