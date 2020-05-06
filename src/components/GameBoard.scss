@@ -58,3 +58,17 @@ $blue: #355c7d;
     z-index: 999;
     transform: translate(0, 0);
 }
+
+.text-medium {
+    font-size: 1.2em;
+}
+
+.button {
+    border: 2px solid rgba(53, 92, 125, 0.75);
+    cursor: pointer;
+    padding: 10px;
+    background: $peach;
+    color: $blue;
+    font-size: 1em;
+    font-weight: 800;
+}

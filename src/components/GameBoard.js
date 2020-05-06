@@ -15,7 +15,6 @@ const hasConsecutive = (arr, amount) => {
         count += 1;
 
         if (amount <= count) {
-            console.log(arr);
             return true;
         }
     }
@@ -45,6 +44,12 @@ class GameBoard extends Component {
             playersTurn: 1,
             winner: 0,
         };
+
+        this.handleReset = this.handleReset.bind(this);
+    }
+
+    componentWillUnmount() {
+        this.handleReset();
     }
 
     handleUnitClick = (rowIndex, unitIndex, unitRow) => {
@@ -69,25 +74,42 @@ class GameBoard extends Component {
         unitRow.splice(unitIndex, 1, playersTurn);
         updatedBoard.splice(rowIndex, 1, unitRow);
 
+        this.setState({
+            gameBoardArr: updatedBoard,
+            playersTurn: nextPlayer,
+        });
+
+        const unitColumn = updatedBoard.map((unitRow) => {
+            return unitRow[unitIndex];
+        });
+
         // If rows have playersTurn number 4 times in a row
-        if (hasConsecutive(unitRow, 4)) {
+        if (hasConsecutive(unitRow, 4) || hasConsecutive(unitColumn, 4)) {
             this.setState({
                 winner: playersTurn,
             });
 
             return;
         }
+    };
 
-        // also loop through each row and create new array for every nth in row
-
+    handleReset = () => {
         this.setState({
-            gameBoardArr: updatedBoard,
-            playersTurn: nextPlayer,
+            gameBoardArr: [
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+            ],
+            playersTurn: 1,
+            winner: 0,
         });
     };
 
     render() {
-        const { gameBoardArr } = this.state;
+        const { gameBoardArr, winner } = this.state;
 
         const gameUnitRow = gameBoardArr.map((unitRow, rowIndex) => {
             return unitRow.map((unit, unitIndex) => {
@@ -111,8 +133,20 @@ class GameBoard extends Component {
                 );
             });
         });
+        const winnerText = winner !== 0 && `Player ${winner} wins!`;
+        const resetButton = winner !== 0 && (
+            <button className="button" onClick={this.handleReset}>
+                Play Again
+            </button>
+        );
 
-        return <div className="gameboard">{gameUnitRow}</div>;
+        return (
+            <div>
+                <div className="gameboard">{gameUnitRow}</div>
+                <p className="text-medium">{winnerText}</p>
+                <p>{resetButton}</p>
+            </div>
+        );
     }
 }
 
